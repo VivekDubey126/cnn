@@ -7,8 +7,11 @@ st.set_page_config(page_title="Plant Disease Detector")
 
 st.title("🌿 Plant Disease Detector")
 
-# Load model
-model = tf.keras.models.load_model("plant_model.h5")
+@st.cache_resource
+def load_model():
+    return tf.keras.models.load_model("plant_model.h5")
+
+model = load_model()
 
 uploaded_file = st.file_uploader("Upload Image", type=["jpg","png"])
 
