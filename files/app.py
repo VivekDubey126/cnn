@@ -2,6 +2,7 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+from pathlib import Path
 
 st.set_page_config(page_title="Plant Disease Detector")
 
@@ -9,7 +10,8 @@ st.title("🌿 Plant Disease Detector")
 
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model("plant_model.h5")
+    model_path = Path(__file__).resolve().parent / "plant_model.h5"
+    return tf.keras.models.load_model(model_path)
 
 model = load_model()
 
