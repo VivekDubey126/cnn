@@ -11,14 +11,22 @@ st.title("🌿 Plant Disease Detector")
 @st.cache_resource
 def load_model():
     model_path = Path(__file__).resolve().parent / "plant_model.h5"
-    return tf.keras.models.load_model(model_path)
+    return tf.keras.models.load_model(model_path, compile=False)
 
-model = load_model()
+try:
+    model = load_model()
+except Exception:
+    st.error(
+        "Model could not be loaded. This usually means the saved .h5 model was "
+        "created with a different TensorFlow/Keras version. Re-save/export the "
+        "model with TensorFlow 2.13 and redeploy."
+    )
+    st.stop()
 
 uploaded_file = st.file_uploader("Upload Image", type=["jpg","png"])
 
 if uploaded_file:
-    image = Image.open(uploaded_file)
+    image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
     if st.button("Predict"):
